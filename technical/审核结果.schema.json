@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yance.example/schemas/material-review-result.schema.json",
+  "title": "材料审核员单项审核结果",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_id",
+    "requirement",
+    "status",
+    "reason",
+    "evidence",
+    "next_action",
+    "needs_human_review"
+  ],
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "审核项唯一编号"
+    },
+    "requirement": {
+      "type": "string",
+      "minLength": 1,
+      "description": "原始审核要求，不得自行改写条件"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["已满足", "信息不足", "缺失", "待人工确认"]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "只基于上传材料说明判断理由"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "description": "支持结论或暴露冲突的证据；缺失状态允许为空数组"
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300,
+      "description": "用户下一步需要补充、核对或执行的动作"
+    },
+    "needs_human_review": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_name", "page", "quote", "supports"],
+      "properties": {
+        "file_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "supports": {
+          "type": "string",
+          "enum": ["支持", "部分支持", "冲突", "失效"]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "已满足"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {"evidence": {"minItems": 1}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "待人工确认"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {"needs_human_review": {"const": true}}
+      }
+    }
+  ]
+}
+

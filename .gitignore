@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+tmp/
+*.inspect.ndjson
+material-auditor-app/node_modules/
+material-auditor-app/.next/
+material-auditor-app/dist/
+material-auditor-app/.wrangler/
+
