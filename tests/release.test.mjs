@@ -46,3 +46,10 @@ test("the vendored PDF.js worker matches the declared package", () => {
   assert.match(worker, /6\.2\.108/);
   assert.match(worker.slice(0, 2000), /Apache License/);
 });
+
+test("the initial page exposes an empty result state instead of demo findings", () => {
+  const page = fs.readFileSync(path.join(root, "app", "page.tsx"), "utf8");
+  assert.match(page, /尚未生成审核结果/);
+  assert.doesNotMatch(page, /const previewResults/);
+  assert.doesNotMatch(page, /results\.length \|\| 10/);
+});

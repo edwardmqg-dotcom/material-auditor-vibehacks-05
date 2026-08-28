@@ -54,13 +54,13 @@ export default function Home() {
     setMessage("正在准备完全虚构的演示材料…");
     setProgress(8);
     try {
-      const checklistResponse = await fetch("/demo/供应商准入审核清单.xlsx");
+      const checklistResponse = await fetch(assetPath("/demo/供应商准入审核清单.xlsx"));
       const checklistBlob = await checklistResponse.blob();
       setChecklistFile(new File([checklistBlob], "供应商准入审核清单.xlsx", { type: checklistBlob.type }));
       const files: File[] = [];
       for (let index = 0; index < DEMO_PDFS.length; index += 1) {
         const name = DEMO_PDFS[index];
-        const response = await fetch(`/demo/evidence-pdfs/${name}`);
+        const response = await fetch(assetPath(`/demo/evidence-pdfs/${name}`));
         const blob = await response.blob();
         files.push(new File([blob], name, { type: "application/pdf" }));
         setProgress(10 + Math.round(((index + 1) / DEMO_PDFS.length) * 60));
@@ -124,8 +124,8 @@ export default function Home() {
     setProgress(65);
     setMessage("正在载入已验证的演示标准答案（备用模式）…");
     try {
-      const response = await fetch("/demo/demo-spec.json");
-      const data = await response.json();
+      const response = await fetch(assetPath("/demo/demo-spec.json"));
+      const data = await response.json() as { checklist: Array<Record<string, unknown>> };
       const standard = new Map(getStandardChecklist().map((item) => [item.itemId, item]));
       const verified = data.checklist.map((entry: Record<string, unknown>) => ({
         ...(standard.get(String(entry.item_id)) as ChecklistItem),
@@ -215,26 +215,36 @@ export default function Home() {
 
         <aside className="summary-card">
           <div className="summary-heading">
-            <div><span>{results.length ? (mode === "live" ? "实时解析结果" : "备用演示结果") : "审核结果预览"}</span><h2>只看需要处理的问题</h2></div>
-            <strong>{results.length || 10} 项</strong>
+            <div><span>{results.length ? (mode === "live" ? "实时解析结果" : "备用演示结果") : "审核结果"}</span><h2>{results.length ? "只看需要处理的问题" : "等待开始审核"}</h2></div>
+            <strong>{results.length} 项</strong>
           </div>
-          <div className="summary-counts">
-            {STATUS_ORDER.map((status, index) => (
-              <button key={status} onClick={() => results.length && setFilter(status)}>
-                <b style={{ color: STATUS_META[status].color }}>{results.length ? counts[status] : [5, 2, 2, 1][index]}</b>
-                <span>{STATUS_META[status].short}</span>
-              </button>
-            ))}
-          </div>
-          <div className="exception-list">
-            {(results.length ? results.filter((item) => item.status !== "已满足").slice(0, 3) : previewResults).map((item) => (
-              <button key={item.itemId} onClick={() => "requirement" in item && setSelected(item as ReviewResult)}>
-                <i className={STATUS_META[item.status].className}>!</i>
-                <span><strong>{"title" in item ? item.title : anomalyTitle(item as ReviewResult)}</strong><small>{item.itemId} · {item.status}</small></span>
-                <b>›</b>
-              </button>
-            ))}
-          </div>
+          {results.length > 0 ? (
+            <>
+              <div className="summary-counts">
+                {STATUS_ORDER.map((status) => (
+                  <button key={status} onClick={() => setFilter(status)}>
+                    <b style={{ color: STATUS_META[status].color }}>{counts[status]}</b>
+                    <span>{STATUS_META[status].short}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="exception-list">
+                {results.filter((item) => item.status !== "已满足").slice(0, 3).map((item) => (
+                  <button key={item.itemId} onClick={() => setSelected(item)}>
+                    <i className={STATUS_META[item.status].className}>!</i>
+                    <span><strong>{anomalyTitle(item)}</strong><small>{item.itemId} · {item.status}</small></span>
+                    <b>›</b>
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="result-empty-state" role="status">
+              <span aria-hidden="true">—</span>
+              <strong>尚未生成审核结果</strong>
+              <p>选择审核清单和 PDF 材料后，点击“开始逐项审核”。</p>
+            </div>
+          )}
           <div className="principle"><small>核心原则</small><p>没有可验证证据，就不能判定通过。<br /><b>机器找材料，人做最终判断。</b></p></div>
         </aside>
       </section>
@@ -312,12 +322,6 @@ function UploadZone({ number, title, detail, accept, multiple = false, files, on
   );
 }
 
-const previewResults: Array<{ itemId: string; status: ReviewStatus; title: string }> = [
-  { itemId: "R-06", status: "信息不足", title: "保险证明已过期" },
-  { itemId: "R-08", status: "缺失", title: "未找到授权委托书" },
-  { itemId: "R-10", status: "待人工确认", title: "团队名册与社保证明冲突" },
-];
-
 function anomalyTitle(item: ReviewResult) {
   const titles: Record<string, string> = { "R-06": "保险证明已过期", "R-07": "同类项目案例数量不足", "R-08": "未找到授权委托书", "R-09": "未找到纳税信用证明", "R-10": "团队名册与社保证明冲突" };
   return titles[item.itemId] ?? `${item.category}审核${item.status}`;
@@ -329,6 +333,10 @@ function formatFiles(files: File[]) {
 }
 
 function pause(ms: number) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+
+function assetPath(path: string) {
+  return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+}
 
 function download(name: string, content: string, type: string) {
   const url = URL.createObjectURL(new Blob([content], { type }));

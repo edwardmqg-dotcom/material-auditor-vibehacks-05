@@ -76,7 +76,7 @@ export async function parseChecklist(file: File): Promise<ChecklistItem[]> {
 export async function parsePdf(file: File): Promise<ParsedDocument> {
   try {
     const pdfjs = await import("pdfjs-dist");
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/pdf.worker.min.mjs`;
     const pdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pages: ParsedDocument["pages"] = [];
     for (let index = 1; index <= pdf.numPages; index += 1) {
