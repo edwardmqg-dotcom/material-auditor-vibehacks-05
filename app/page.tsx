@@ -167,7 +167,7 @@ export default function Home() {
             <span><small>演策实验</small><strong>材料审核员</strong></span>
           </div>
           <div className="top-actions">
-            <span className="trust-badge"><i /> AI 初审 · 人工决策</span>
+            <span className="trust-badge"><i /> 规则初审 · 人工决策</span>
             <button className="quiet-button" onClick={loadDemo} disabled={isBusy}>载入演示材料</button>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function Home() {
           <div className="upload-stack">
             <UploadZone
               number="1" title="上传标准 Checklist" detail="XLSX 或 CSV · 仅支持材料审核员标准模板"
-              accept=".xlsx,.xls,.csv" files={checklistFile ? [checklistFile] : []}
+              accept=".xlsx,.csv" files={checklistFile ? [checklistFile] : []}
               onChange={(files) => { setChecklistFile(files[0] ?? null); setResults([]); setMessage(""); }}
             />
             <UploadZone
@@ -293,7 +293,7 @@ export default function Home() {
               )) : <div className="empty-evidence">当前上传材料中未找到可引用证据。</div>}
             </section>
             <section className="next-action"><small>建议下一步</small><p>{selected.nextAction}</p></section>
-            <p className="human-note">AI 初审结果，请由专业人员完成最终确认。</p>
+            <p className="human-note">自动规则初审结果，请由专业人员完成最终确认。</p>
           </aside>
         </div>
       )}
@@ -343,7 +343,7 @@ function exportCsv(results: ReviewResult[]) {
 }
 
 function exportMarkdown(results: ReviewResult[]) {
-  const lines = ["# 材料审核员｜审核结果", "", "> AI 初审结果，关键结论需由专业人员最终复核。", ""];
+  const lines = ["# 材料审核员｜审核结果", "", "> 自动规则初审结果，关键结论需由专业人员最终复核。", ""];
   results.forEach((item) => lines.push(`## ${item.itemId} ${item.category}｜${item.status}`, "", `**审核要求：** ${item.requirement}`, "", `**判断理由：** ${item.reason}`, "", `**证据：** ${item.evidence.length ? item.evidence.map((entry) => `${entry.fileName} 第 ${entry.page} 页：“${entry.quote}”`).join("；") : "当前上传材料中未找到。"}`, "", `**下一步：** ${item.nextAction}`, ""));
   download("材料审核员-审核结果.md", lines.join("\n"), "text/markdown;charset=utf-8");
 }

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root { --ink: #102a43; --navy: #123b5d; --blue: #2e75b6; --muted: #64788a; --line: #d6e0e7; --surface: #ffffff; --background: #f2f5f7; }
-@theme inline { --color-background: var(--background); --color-foreground: var(--ink); --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono); }
+@theme inline { --color-background: var(--background); --color-foreground: var(--ink); --font-sans: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; --font-mono: "SFMono-Regular", Consolas, monospace; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--background); }
-body { margin: 0; background: radial-gradient(circle at 75% 2%, #e8f3f8 0, transparent 30rem), var(--background); color: var(--ink); font-family: var(--font-geist-sans), "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+body { margin: 0; background: radial-gradient(circle at 75% 2%, #e8f3f8 0, transparent 30rem), var(--background); color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
 button, input { font: inherit; }
 button { color: inherit; }
 ::selection { color: var(--ink); background: #c9e3f2; }
