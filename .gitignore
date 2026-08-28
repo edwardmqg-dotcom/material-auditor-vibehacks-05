@@ -3,10 +3,10 @@
 .env.*
 !.env.example
 node_modules/
+.pnpm-store/
 tmp/
 *.inspect.ndjson
 material-auditor-app/node_modules/
 material-auditor-app/.next/
 material-auditor-app/dist/
 material-auditor-app/.wrangler/
-

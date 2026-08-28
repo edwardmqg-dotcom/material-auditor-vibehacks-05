@@ -1,0 +1,217 @@
+{
+  "dataset_name": "材料审核员 - 供应商准入演示数据集",
+  "version": "1.0",
+  "generated_for": "VibeHacks #05",
+  "as_of_date": "2026-08-29",
+  "synthetic_data_notice": "本数据集完全虚构，仅用于产品演示和软件测试，不代表任何真实公司、个人或交易。",
+  "company": {
+    "name": "北京准点科技有限公司",
+    "unified_social_credit_code": "91110108MA00DEMO26",
+    "legal_representative": "陈明远（虚构）",
+    "registered_capital_cny": 5000000,
+    "business_term_start": "2024-01-12",
+    "business_term_end": "2034-01-11",
+    "registered_address": "北京市海淀区原点路 88 号 8 层（虚构）"
+  },
+  "status_definitions": {
+    "已满足": "上传材料中存在充分、直接且可追溯的证据，能够支持全部审核条件。",
+    "信息不足": "发现相关材料，但证据过期、数量不足或只满足部分条件。",
+    "缺失": "当前上传材料中未找到与该审核项对应的有效材料。",
+    "待人工确认": "材料之间存在冲突、规则含糊或无法由当前证据可靠判断。"
+  },
+  "checklist": [
+    {
+      "item_id": "R-01",
+      "category": "主体资格",
+      "requirement": "营业执照在审核基准日有效，且经营范围包含软件开发或技术服务。",
+      "expected_status": "已满足",
+      "expected_reason": "营业期限覆盖 2026-08-29，经营范围明确包含软件开发与技术服务。",
+      "evidence": [
+        {
+          "file_name": "01_营业执照.pdf",
+          "page": 1,
+          "quote": "营业期限：2024年01月12日至2034年01月11日"
+        },
+        {
+          "file_name": "01_营业执照.pdf",
+          "page": 1,
+          "quote": "经营范围：软件开发、信息系统集成服务、技术咨询、技术服务"
+        }
+      ],
+      "next_action": "无需补充。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-02",
+      "category": "银行账户",
+      "requirement": "银行账户证明中的账户名称必须与营业执照中的企业名称一致。",
+      "expected_status": "已满足",
+      "expected_reason": "银行账户名称与营业执照企业名称均为北京准点科技有限公司。",
+      "evidence": [
+        {
+          "file_name": "02_银行账户证明.pdf",
+          "page": 1,
+          "quote": "账户名称：北京准点科技有限公司"
+        },
+        {
+          "file_name": "01_营业执照.pdf",
+          "page": 1,
+          "quote": "名称：北京准点科技有限公司"
+        }
+      ],
+      "next_action": "无需补充。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-03",
+      "category": "财务能力",
+      "requirement": "最近一个完整会计年度的审计意见为无保留意见，且年末净资产不低于人民币 100 万元。",
+      "expected_status": "已满足",
+      "expected_reason": "2025 年审计意见为无保留意见，年末净资产为人民币 320 万元。",
+      "evidence": [
+        {
+          "file_name": "03_2025年度审计报告摘要.pdf",
+          "page": 1,
+          "quote": "审计意见类型：无保留意见"
+        },
+        {
+          "file_name": "03_2025年度审计报告摘要.pdf",
+          "page": 2,
+          "quote": "2025年12月31日净资产：人民币3,200,000元"
+        }
+      ],
+      "next_action": "无需补充。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-04",
+      "category": "项目经验",
+      "requirement": "近三年内至少有一项合同金额不低于人民币 50 万元的软件或数字化项目。",
+      "expected_status": "已满足",
+      "expected_reason": "2025 年签订的软件项目合同金额为人民币 680,000 元。",
+      "evidence": [
+        {
+          "file_name": "05_项目合同摘要.pdf",
+          "page": 1,
+          "quote": "合同金额：人民币陆拾捌万元整（¥680,000）"
+        },
+        {
+          "file_name": "05_项目合同摘要.pdf",
+          "page": 1,
+          "quote": "项目内容：供应链数据分析平台软件开发与部署"
+        }
+      ],
+      "next_action": "无需补充。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-05",
+      "category": "信息安全",
+      "requirement": "具有现行有效的信息安全管理制度，且制度包含访问控制、数据备份和安全事件处置要求。",
+      "expected_status": "已满足",
+      "expected_reason": "制度版本为 V2.1，自 2026-01-01 生效，并包含访问控制、数据备份和安全事件处置章节。",
+      "evidence": [
+        {
+          "file_name": "04_信息安全管理制度.pdf",
+          "page": 1,
+          "quote": "文件版本：V2.1；生效日期：2026年01月01日"
+        },
+        {
+          "file_name": "04_信息安全管理制度.pdf",
+          "page": 2,
+          "quote": "本制度包括访问控制、数据备份与恢复、安全事件报告及处置要求"
+        }
+      ],
+      "next_action": "无需补充。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-06",
+      "category": "保险保障",
+      "requirement": "提交的雇主责任险或公众责任险证明在审核基准日仍处于有效期内。",
+      "expected_status": "信息不足",
+      "expected_reason": "已提交保险证明，但保险期限已于 2026-06-30 结束，早于审核基准日 2026-08-29。",
+      "evidence": [
+        {
+          "file_name": "06_雇主责任险证明_已过期.pdf",
+          "page": 1,
+          "quote": "保险期间：2025年07月01日零时起至2026年06月30日二十四时止"
+        }
+      ],
+      "next_action": "补充覆盖 2026-08-29 的有效保险凭证或续保证明。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-07",
+      "category": "项目经验",
+      "requirement": "近三年内至少提供两项同类软件项目案例及对应合同依据。",
+      "expected_status": "信息不足",
+      "expected_reason": "当前仅找到一项符合时间和项目类型要求的合同，数量未达到两项。",
+      "evidence": [
+        {
+          "file_name": "05_项目合同摘要.pdf",
+          "page": 1,
+          "quote": "合同签订日期：2025年05月16日"
+        },
+        {
+          "file_name": "05_项目合同摘要.pdf",
+          "page": 1,
+          "quote": "项目内容：供应链数据分析平台软件开发与部署"
+        }
+      ],
+      "next_action": "再补充至少一项近三年的同类项目合同或验收材料。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-08",
+      "category": "授权文件",
+      "requirement": "非法定代表人办理准入时，必须提交法定代表人授权委托书。",
+      "expected_status": "缺失",
+      "expected_reason": "当前上传材料中未找到法定代表人授权委托书。",
+      "evidence": [],
+      "next_action": "补充签字或盖章的法定代表人授权委托书。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-09",
+      "category": "纳税信用",
+      "requirement": "提交最近六个月内出具的无欠税证明或纳税信用证明。",
+      "expected_status": "缺失",
+      "expected_reason": "当前上传材料中未找到无欠税证明或纳税信用证明。",
+      "evidence": [],
+      "next_action": "补充最近六个月内由主管税务机关出具的相关证明。",
+      "needs_human_review": false
+    },
+    {
+      "item_id": "R-10",
+      "category": "人员能力",
+      "requirement": "在职技术人员不少于 5 人，并提供可相互印证的人员名册与近期社保缴纳记录。",
+      "expected_status": "待人工确认",
+      "expected_reason": "技术团队名册列示 6 人，但社保缴纳证明仅列示 4 人，两份材料无法相互印证。",
+      "evidence": [
+        {
+          "file_name": "07_技术团队名册.pdf",
+          "page": 1,
+          "quote": "技术团队在职人员合计：6人"
+        },
+        {
+          "file_name": "08_社保缴纳证明.pdf",
+          "page": 1,
+          "quote": "本期参保人员：4人"
+        }
+      ],
+      "next_action": "人工核对两名未出现在社保证明中的人员状态，并补充相应在职或参保证明。",
+      "needs_human_review": true
+    }
+  ],
+  "documents": [
+    {"file_name": "01_营业执照.pdf", "pages": 1, "purpose": "证明主体资格、经营范围和营业期限"},
+    {"file_name": "02_银行账户证明.pdf", "pages": 1, "purpose": "证明账户名称与企业名称一致"},
+    {"file_name": "03_2025年度审计报告摘要.pdf", "pages": 2, "purpose": "证明审计意见和净资产"},
+    {"file_name": "04_信息安全管理制度.pdf", "pages": 2, "purpose": "证明信息安全制度有效并覆盖必要主题"},
+    {"file_name": "05_项目合同摘要.pdf", "pages": 2, "purpose": "证明一项近三年软件项目及合同金额"},
+    {"file_name": "06_雇主责任险证明_已过期.pdf", "pages": 1, "purpose": "构造已过期、信息不足场景"},
+    {"file_name": "07_技术团队名册.pdf", "pages": 1, "purpose": "列示 6 名技术人员"},
+    {"file_name": "08_社保缴纳证明.pdf", "pages": 1, "purpose": "仅列示 4 人，与团队名册构成冲突"}
+  ]
+}
