@@ -1,0 +1,19 @@
+# dependencies
+/node_modules/
+
+# build output and local runtime state
+/.next/
+/.vinext/
+/dist/
+/out/
+/.wrangler/
+/work/
+
+# local configuration and deployment bindings
+.env*
+!.env.example
+/.openai/hosting.json
+
+# logs and operating-system files
+*.log
+.DS_Store
