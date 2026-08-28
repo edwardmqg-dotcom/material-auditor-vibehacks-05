@@ -51,11 +51,10 @@ export async function parseChecklist(file: File): Promise<ChecklistItem[]> {
     const text = await file.text();
     rows = text.split(/\r?\n/).filter(Boolean).map((line) => line.split(",").map((cell) => cell.trim().replace(/^"|"$/g, "")));
   } else {
-    const xlsxModule = await import("xlsx");
-    const XLSX = xlsxModule.default ?? xlsxModule;
-    const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" }) as unknown[][];
+    const { default: readXlsxFile } = await import("read-excel-file/browser");
+    const sheets = await readXlsxFile(file);
+    rows = sheets[0]?.data as unknown[][];
+    if (!rows) throw new Error("工作簿中没有可读取的工作表。");
   }
 
   const headerIndex = rows.findIndex((row) => String(row[0]).trim() === "审核项编号");
@@ -77,7 +76,7 @@ export async function parseChecklist(file: File): Promise<ChecklistItem[]> {
 export async function parsePdf(file: File): Promise<ParsedDocument> {
   try {
     const pdfjs = await import("pdfjs-dist");
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/pdf.worker.min.mjs`;
     const pdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pages: ParsedDocument["pages"] = [];
     for (let index = 1; index <= pdf.numPages; index += 1) {

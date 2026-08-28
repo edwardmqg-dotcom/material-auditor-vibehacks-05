@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root { --ink: #102a43; --navy: #123b5d; --blue: #2e75b6; --muted: #64788a; --line: #d6e0e7; --surface: #ffffff; --background: #f2f5f7; }
-@theme inline { --color-background: var(--background); --color-foreground: var(--ink); --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono); }
+@theme inline { --color-background: var(--background); --color-foreground: var(--ink); --font-sans: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; --font-mono: "SFMono-Regular", Consolas, monospace; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--background); }
-body { margin: 0; background: radial-gradient(circle at 75% 2%, #e8f3f8 0, transparent 30rem), var(--background); color: var(--ink); font-family: var(--font-geist-sans), "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+body { margin: 0; background: radial-gradient(circle at 75% 2%, #e8f3f8 0, transparent 30rem), var(--background); color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
 button, input { font: inherit; }
 button { color: inherit; }
 ::selection { color: var(--ink); background: #c9e3f2; }
@@ -80,6 +80,10 @@ button { color: inherit; }
 .exception-list strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 .exception-list small { margin-top: 3px; color: #a9bfcd; font-size: 10px; }
 .exception-list button > b { margin-left: auto; color: #89a7ba; font-size: 19px; }
+.result-empty-state { min-height: 206px; margin-top: 25px; padding: 30px 22px; display: grid; place-content: center; justify-items: center; border: 1px dashed rgba(255,255,255,.16); border-radius: 15px; background: rgba(255,255,255,.035); text-align: center; }
+.result-empty-state > span { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; color: #91adbf; background: rgba(255,255,255,.075); font-size: 22px; }
+.result-empty-state strong { margin-top: 15px; color: #e2edf3; font-size: 14px; }
+.result-empty-state p { max-width: 290px; margin: 8px 0 0; color: #9eb5c4; font-size: 11px; line-height: 1.7; }
 .principle { margin-top: 18px; padding: 15px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(0,0,0,.1); }
 .principle small { color: #9bc8e5; font-size: 10px; letter-spacing: .1em; font-weight: 800; }
 .principle p { margin: 7px 0 0; color: #d8e5ed; font-size: 12px; line-height: 1.75; }
