@@ -22,12 +22,15 @@ test("demo package is complete and explicitly synthetic", () => {
   assert.equal(statusCounts["待人工确认"].length, 1);
 });
 
-test("Sites deployment binding contains only the expected fields", () => {
-  const hosting = JSON.parse(fs.readFileSync(path.join(root, ".openai", "hosting.json"), "utf8"));
-  assert.deepEqual(Object.keys(hosting).sort(), ["d1", "project_id", "r2"]);
-  assert.match(hosting.project_id, /^appgprj_[a-z0-9]+$/);
-  assert.equal(hosting.d1, null);
-  assert.equal(hosting.r2, null);
+test("Sites deployment binding stays private and valid when present locally", () => {
+  const hostingPath = path.join(root, ".openai", "hosting.json");
+  if (fs.existsSync(hostingPath)) {
+    const hosting = JSON.parse(fs.readFileSync(hostingPath, "utf8"));
+    assert.deepEqual(Object.keys(hosting).sort(), ["d1", "project_id", "r2"]);
+    assert.match(hosting.project_id, /^appgprj_[a-z0-9]+$/);
+    assert.equal(hosting.d1, null);
+    assert.equal(hosting.r2, null);
+  }
   assert.match(fs.readFileSync(path.join(root, ".gitignore"), "utf8"), /hosting\.json/);
 });
 
@@ -57,7 +60,6 @@ test("the initial page exposes an empty result state instead of demo findings", 
   assert.doesNotMatch(page, /const previewResults/);
   assert.doesNotMatch(page, /results\.length \|\| 10/);
 });
-
 test("the primary flow requires real file selection and hides emergency results until an error", () => {
   const page = fs.readFileSync(path.join(root, "app", "page.tsx"), "utf8");
   assert.doesNotMatch(page, />载入演示材料</);
