@@ -31,11 +31,13 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("");
   const [selected, setSelected] = useState<ReviewResult | null>(null);
-  const [filter, setFilter] = useState<"全部" | ReviewStatus>("全部");
+  const [filter, setFilter] = useState<"全部" | "需处理" | ReviewStatus>("全部");
   const [mode, setMode] = useState<"live" | "verified">("live");
 
   const counts = useMemo(() => Object.fromEntries(STATUS_ORDER.map((status) => [status, results.filter((item) => item.status === status).length])) as Record<ReviewStatus, number>, [results]);
-  const filtered = filter === "全部" ? results : results.filter((item) => item.status === filter);
+  const issueResults = results.filter((item) => item.status !== "已满足");
+  const featuredIssues = selectFeaturedIssues(issueResults);
+  const filtered = filter === "全部" ? results : filter === "需处理" ? issueResults : results.filter((item) => item.status === filter);
   const isBusy = ["parsing", "reviewing"].includes(stage);
 
   async function runReview() {
@@ -176,8 +178,12 @@ export default function Home() {
 
         <aside className="summary-card">
           <div className="summary-heading">
-            <div><span>{results.length ? (mode === "live" ? "实时解析结果" : "备用演示结果") : "审核结果"}</span><h2>{results.length ? "只看需要处理的问题" : "等待开始审核"}</h2></div>
-            <strong>{results.length} 项</strong>
+            <div>
+              <span>{results.length ? (mode === "live" ? "实时解析结果" : "备用演示结果") : "审核结果"}</span>
+              <h2>{results.length ? `${featuredIssues.length} 项重点异常` : "等待开始审核"}</h2>
+              {results.length > 0 && <p>共 {issueResults.length} 项需要处理</p>}
+            </div>
+            <strong>{results.length > 0 ? `${issueResults.length} 项需处理` : "0 项"}</strong>
           </div>
           {results.length > 0 ? (
             <>
@@ -190,7 +196,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="exception-list">
-                {results.filter((item) => item.status !== "已满足").slice(0, 3).map((item) => (
+                {featuredIssues.map((item) => (
                   <button key={item.itemId} onClick={() => setSelected(item)}>
                     <i className={STATUS_META[item.status].className}>!</i>
                     <span><strong>{anomalyTitle(item)}</strong><small>{item.itemId} · {item.status}</small></span>
@@ -198,6 +204,16 @@ export default function Home() {
                   </button>
                 ))}
               </div>
+              <button
+                type="button"
+                className="summary-view-all"
+                onClick={() => {
+                  setFilter("需处理");
+                  document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                查看全部 {issueResults.length} 项 <span>↓</span>
+              </button>
             </>
           ) : (
             <div className="result-empty-state" role="status">
@@ -222,7 +238,7 @@ export default function Home() {
           </div>
 
           <div className="filter-row">
-            {(["全部", ...STATUS_ORDER] as const).map((status) => <button className={filter === status ? "active" : ""} onClick={() => setFilter(status)} key={status}>{status}{status !== "全部" && ` ${counts[status]}`}</button>)}
+            {(["全部", "需处理", ...STATUS_ORDER] as const).map((status) => <button className={filter === status ? "active" : ""} onClick={() => setFilter(status)} key={status}>{status}{status === "需处理" ? ` ${issueResults.length}` : status !== "全部" ? ` ${counts[status]}` : ""}</button>)}
           </div>
 
           <div className="result-grid">
@@ -286,6 +302,13 @@ function UploadZone({ number, title, detail, accept, multiple = false, files, on
 function anomalyTitle(item: ReviewResult) {
   const titles: Record<string, string> = { "R-06": "保险证明已过期", "R-07": "同类项目案例数量不足", "R-08": "未找到授权委托书", "R-09": "未找到纳税信用证明", "R-10": "团队名册与社保证明冲突" };
   return titles[item.itemId] ?? `${item.category}审核${item.status}`;
+}
+
+function selectFeaturedIssues(issues: ReviewResult[]) {
+  const featuredIds = ["R-06", "R-08", "R-10"];
+  const featured = featuredIds.map((itemId) => issues.find((item) => item.itemId === itemId)).filter((item): item is ReviewResult => Boolean(item));
+  const fallback = issues.filter((item) => !featuredIds.includes(item.itemId));
+  return [...featured, ...fallback].slice(0, 3);
 }
 
 function formatFiles(files: File[]) {

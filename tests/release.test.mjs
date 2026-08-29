@@ -69,3 +69,12 @@ test("the primary flow requires real file selection and hides emergency results 
   assert.match(page, /应急：打开已验证结果（非实时）/);
   assert.match(page, /上传、解析与审核流程均为实时执行/);
 });
+
+test("the summary names three representative exceptions and links to all issues", () => {
+  const page = fs.readFileSync(path.join(root, "app", "page.tsx"), "utf8");
+  assert.match(page, /const featuredIds = \["R-06", "R-08", "R-10"\]/);
+  assert.match(page, /项重点异常/);
+  assert.match(page, /共 \{issueResults\.length\} 项需要处理/);
+  assert.match(page, /查看全部 \{issueResults\.length\} 项/);
+  assert.match(page, /setFilter\("需处理"\)/);
+});
