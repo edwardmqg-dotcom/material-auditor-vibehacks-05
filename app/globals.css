@@ -21,8 +21,8 @@ button { color: inherit; }
 .top-actions { display: flex; align-items: center; gap: 10px; }
 .trust-badge { display: flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1px solid #cfe0eb; border-radius: 999px; color: #24506f; background: #edf6fa; font-size: 12px; font-weight: 700; }
 .trust-badge i { width: 6px; height: 6px; border-radius: 50%; background: #4bb477; box-shadow: 0 0 0 3px rgba(75,180,119,.15); }
-.quiet-button, .export-actions button { border: 1px solid #cfdbe4; border-radius: 10px; background: white; padding: 9px 13px; font-size: 12px; font-weight: 750; cursor: pointer; transition: .2s; }
-.quiet-button:hover, .export-actions button:hover { border-color: #7da2bb; transform: translateY(-1px); }
+.export-actions button { border: 1px solid #cfdbe4; border-radius: 10px; background: white; padding: 9px 13px; font-size: 12px; font-weight: 750; cursor: pointer; transition: .2s; }
+.export-actions button:hover { border-color: #7da2bb; transform: translateY(-1px); }
 
 .hero { padding-top: 58px; padding-bottom: 35px; }
 .eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; color: var(--blue); font-size: 12px; letter-spacing: .13em; font-weight: 800; }
@@ -57,8 +57,8 @@ button { color: inherit; }
 .progress-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2e75b6, #6db8d5); transition: width .28s ease; }
 .primary-button { width: 100%; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 11px; padding: 15px 18px; border: 0; border-radius: 12px; color: white; background: var(--navy); font-size: 15px; font-weight: 800; box-shadow: 0 10px 24px rgba(18,59,93,.2); cursor: pointer; transition: .2s; }
 .primary-button:hover:not(:disabled) { background: #0d304e; transform: translateY(-1px); }
-.primary-button:disabled, .quiet-button:disabled, .text-button:disabled { opacity: .58; cursor: wait; }
-.button-row { display: flex; justify-content: center; gap: 16px; margin-top: 13px; }
+.primary-button:disabled, .text-button:disabled { opacity: .58; cursor: wait; }
+.recovery-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 13px; padding: 9px 12px; border: 1px solid #ead9ae; border-radius: 10px; color: #765414; background: #fff8e8; font-size: 11px; }
 .text-button { padding: 2px; border: 0; color: #2b6893; background: none; font-size: 11px; font-weight: 750; cursor: pointer; }
 .text-button.muted { color: #7b8b98; }
 .disclaimer { margin: 14px 0 0; color: #8998a4; text-align: center; font-size: 10px; line-height: 1.6; }
@@ -154,14 +154,13 @@ button { color: inherit; }
 
 @media (max-width: 520px) {
   .container { width: min(100% - 20px, 480px); }
-  .quiet-button { display: none; }
   .hero { padding-top: 30px; padding-bottom: 25px; }
   .hero p { font-size: 14px; }
   .upload-card, .summary-card { padding: 19px; border-radius: 20px; }
   .card-heading time { display: none; }
   .file-button { display: none; }
   .upload-copy small { white-space: normal; line-height: 1.5; }
-  .button-row { display: grid; gap: 7px; }
+  .recovery-row { display: grid; gap: 7px; }
   .summary-counts { gap: 5px; }
   .summary-counts b { font-size: 20px; }
   .detail-drawer { padding: 25px 20px; }

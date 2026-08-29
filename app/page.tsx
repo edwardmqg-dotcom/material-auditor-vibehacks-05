@@ -12,17 +12,6 @@ import {
   reviewDocuments,
 } from "@/lib/review-engine";
 
-const DEMO_PDFS = [
-  "01_营业执照.pdf",
-  "02_银行账户证明.pdf",
-  "03_2025年度审计报告摘要.pdf",
-  "04_信息安全管理制度.pdf",
-  "05_项目合同摘要.pdf",
-  "06_雇主责任险证明_已过期.pdf",
-  "07_技术团队名册.pdf",
-  "08_社保缴纳证明.pdf",
-];
-
 const STATUS_ORDER: ReviewStatus[] = ["已满足", "信息不足", "缺失", "待人工确认"];
 const STATUS_META: Record<ReviewStatus, { short: string; color: string; className: string }> = {
   已满足: { short: "满足", color: "#69c58b", className: "status-pass" },
@@ -31,7 +20,7 @@ const STATUS_META: Record<ReviewStatus, { short: string; color: string; classNam
   待人工确认: { short: "人工", color: "#7c91a3", className: "status-human" },
 };
 
-type Stage = "idle" | "loading-demo" | "parsing" | "reviewing" | "completed" | "error";
+type Stage = "idle" | "parsing" | "reviewing" | "completed" | "error";
 
 export default function Home() {
   const [checklistFile, setChecklistFile] = useState<File | null>(null);
@@ -47,36 +36,7 @@ export default function Home() {
 
   const counts = useMemo(() => Object.fromEntries(STATUS_ORDER.map((status) => [status, results.filter((item) => item.status === status).length])) as Record<ReviewStatus, number>, [results]);
   const filtered = filter === "全部" ? results : results.filter((item) => item.status === filter);
-  const isBusy = ["loading-demo", "parsing", "reviewing"].includes(stage);
-
-  async function loadDemo() {
-    setStage("loading-demo");
-    setMessage("正在准备完全虚构的演示材料…");
-    setProgress(8);
-    try {
-      const checklistResponse = await fetch(assetPath("/demo/供应商准入审核清单.xlsx"));
-      const checklistBlob = await checklistResponse.blob();
-      setChecklistFile(new File([checklistBlob], "供应商准入审核清单.xlsx", { type: checklistBlob.type }));
-      const files: File[] = [];
-      for (let index = 0; index < DEMO_PDFS.length; index += 1) {
-        const name = DEMO_PDFS[index];
-        const response = await fetch(assetPath(`/demo/evidence-pdfs/${name}`));
-        const blob = await response.blob();
-        files.push(new File([blob], name, { type: "application/pdf" }));
-        setProgress(10 + Math.round(((index + 1) / DEMO_PDFS.length) * 60));
-      }
-      setDocumentFiles(files);
-      setResults([]);
-      setParsedDocs([]);
-      setMode("live");
-      setStage("idle");
-      setProgress(0);
-      setMessage("演示材料已就绪：1 份清单，8 份 PDF。点击开始逐项审核。");
-    } catch {
-      setStage("error");
-      setMessage("演示材料载入失败，请刷新页面后重试。");
-    }
-  }
+  const isBusy = ["parsing", "reviewing"].includes(stage);
 
   async function runReview() {
     if (!checklistFile || documentFiles.length === 0) {
@@ -168,7 +128,6 @@ export default function Home() {
           </div>
           <div className="top-actions">
             <span className="trust-badge"><i /> 规则初审 · 人工决策</span>
-            <button className="quiet-button" onClick={loadDemo} disabled={isBusy}>载入演示材料</button>
           </div>
         </div>
       </header>
@@ -206,11 +165,13 @@ export default function Home() {
             {stage === "parsing" ? "正在解析文件…" : stage === "reviewing" ? "正在核验证据…" : "开始逐项审核"}
             <span>→</span>
           </button>
-          <div className="button-row">
-            <button type="button" className="text-button" onClick={loadDemo} disabled={isBusy}>一键载入虚构演示材料</button>
-            <button type="button" className="text-button muted" onClick={useVerifiedResults} disabled={isBusy}>备用：使用已验证结果</button>
-          </div>
-          <p className="disclaimer">演示数据完全虚构。系统结果为初审意见，关键结论需由专业人员最终复核。</p>
+          {stage === "error" && checklistFile && documentFiles.length > 0 && (
+            <div className="recovery-row">
+              <span>实时解析没有完成。</span>
+              <button type="button" className="text-button muted" onClick={useVerifiedResults} disabled={isBusy}>应急：打开已验证结果（非实时）</button>
+            </div>
+          )}
+          <p className="disclaimer">现场材料为虚构样例；上传、解析与审核流程均为实时执行。系统结果为初审意见，关键结论需由专业人员最终复核。</p>
         </section>
 
         <aside className="summary-card">

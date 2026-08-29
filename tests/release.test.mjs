@@ -57,3 +57,13 @@ test("the initial page exposes an empty result state instead of demo findings", 
   assert.doesNotMatch(page, /const previewResults/);
   assert.doesNotMatch(page, /results\.length \|\| 10/);
 });
+
+test("the primary flow requires real file selection and hides emergency results until an error", () => {
+  const page = fs.readFileSync(path.join(root, "app", "page.tsx"), "utf8");
+  assert.doesNotMatch(page, />载入演示材料</);
+  assert.doesNotMatch(page, />一键载入虚构演示材料</);
+  assert.doesNotMatch(page, /function loadDemo/);
+  assert.match(page, /stage === "error" && checklistFile && documentFiles\.length > 0/);
+  assert.match(page, /应急：打开已验证结果（非实时）/);
+  assert.match(page, /上传、解析与审核流程均为实时执行/);
+});
