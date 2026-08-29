@@ -2,8 +2,9 @@
 
 把标准审核清单和 PDF 材料包转成可追溯的逐项审核结果：找证据、标缺项、识别冲突，并把真正需要判断的事项留给人。
 
-- 主演示地址：<https://material-auditor-vh05.edwardmqg.chatgpt.site/>
-- 中国大陆备用镜像：<https://edwardmqg-dotcom.github.io/material-auditor-vibehacks-05/>
+- 主演示地址：<https://edwardmqg-dotcom.github.io/material-auditor-vibehacks-05/>
+- ChatGPT 备用入口：<https://material-auditor-vh05.edwardmqg.chatgpt.site/>
+- VibeHacks 项目页：<https://vibecafe.ai/hacks/5/projects/cmte3u5ml00050ajay5gurv8b>
 - 比赛背景：VibeHacks #05「Vibe Coding for 准点下班」
 - 技术栈：Next.js、React、Vinext、PDF.js、read-excel-file
 
