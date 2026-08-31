@@ -8,6 +8,10 @@
 - 比赛背景：VibeHacks #05「Vibe Coding for 准点下班」
 - 技术栈：Next.js、React、Vinext、PDF.js、read-excel-file
 
+![材料审核员使用完全虚构的供应商材料展示审核结果](./docs/material-auditor-synthetic-demo.jpg)
+
+截图中的清单、文件名和审核结果均来自仓库内的合成演示数据，不对应任何真实公司、个人或交易。
+
 ## 这个版本能做什么
 
 - 读取标准 XLSX/CSV 审核清单；
@@ -60,6 +64,7 @@ pnpm audit --prod
 app/                 页面与样式
 lib/                 文件解析和审核规则
 public/demo/         合成清单、PDF 与预期结果
+docs/                隐私安全的产品截图
 tests/               发布完整性测试
 .github/workflows/   持续集成
 ```
