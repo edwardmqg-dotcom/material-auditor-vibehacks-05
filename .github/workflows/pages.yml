@@ -30,16 +30,16 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - run: pnpm install --frozen-lockfile
       - name: Build static mirror
         run: pnpm build:pages
         env:
           BUILD_STATIC_EXPORT: "true"
           NEXT_PUBLIC_BASE_PATH: /material-auditor-vibehacks-05
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: out
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
